@@ -1,3 +1,8 @@
+"""
+Created on August 10, Friday
+
+@author: Enes Can ERKAN
+"""
 import cv2
 import numpy as np
 import tkinter as tk
