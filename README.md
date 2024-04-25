@@ -1,3 +1,5 @@
+##(The main color counting code is my CountColors, while the others are variants I tried and that helped in development.)
+
 COLOR DETECTION APPLICATION
 This Python application captures live video from a webcam and detects specific colors in the video stream. The application is developed using libraries such as OpenCV and Tkinter.
 
