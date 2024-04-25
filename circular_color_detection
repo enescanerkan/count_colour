@@ -1,0 +1,84 @@
+import argparse
+import imutils
+import cv2
+import time
+import numpy as np
+
+
+"""
+Color Detection Script
+This script captures live video from a webcam or a provided video file and detects specific colors in the video stream. 
+The detected colors are red, green, blue, and yellow. It displays the video feed with detected colors highlighted 
+and counts the number of occurrences for each color in real-time.
+"""
+# Renklerin başlangıç değerlerini ve eşik değerlerini tanımlama
+colors = {
+    'red': {'lower': (0, 100, 100), 'upper': (10, 255, 255), 'count': 0, 'color': (0, 0, 255)},
+    'green': {'lower': (45, 100, 50), 'upper': (75, 255, 255), 'count': 0, 'color': (0, 255, 0)},
+    'blue': {'lower': (100, 150, 0), 'upper': (140, 255, 255), 'count': 0, 'color': (255, 0, 0)},
+    'yellow': {'lower': (22, 100, 100), 'upper': (38, 255, 255), 'count': 0, 'color': (0, 255, 255)}
+}
+
+# Argüman ayrıştırıcıyı oluşturma ve argümanları ayrıştırma
+ap = argparse.ArgumentParser()
+ap.add_argument("-v", "--video", help="video dosyasının yolu (isteğe bağlı)")
+args = vars(ap.parse_args())
+
+# Video yolu verilmediyse, webcam'e erişme
+if not args.get("video", False):
+    camera = cv2.VideoCapture(0)
+else:
+    camera = cv2.VideoCapture(args["video"])
+
+# Eşik değerleri
+threshold = 1000
+last_update = time.time()
+
+while True:
+    (grabbed, frame) = camera.read()
+
+    if not grabbed:
+        break
+
+    # Kareyi yeniden boyutlandırma ve HSV formatına dönüştürme
+    frame = imutils.resize(frame, width=1000)
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+    # Her bir renk için maske oluşturma ve konturları bulma
+    for color, values in colors.items():
+        lower = values['lower']
+        upper = values['upper']
+        mask = cv2.inRange(hsv, lower, upper)
+        mask = cv2.erode(mask, None, iterations=2)
+        mask = cv2.dilate(mask, None, iterations=2)
+        contours = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours = imutils.grab_contours(contours)
+
+        # Konturları bulduysa, en büyük konturu seçme ve merkezini ve yarıçapını hesaplama
+        if len(contours) > 0:
+            contour = max(contours, key=cv2.contourArea)
+            ((x, y), radius) = cv2.minEnclosingCircle(contour)
+            M = cv2.moments(contour)
+            center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+            radius = int(radius)
+
+            # Eşik değerini kontrol edin ve renk sayısını güncelleyin
+            if radius > threshold:
+                values['count'] += 1
+
+            # Merkez ve daireyi çizin
+            cv2.circle(frame, (int(x), int(y)), radius, values['color'], 2)
+            cv2.circle(frame, center, 5, values['color'], -1)
+
+    # Ekranı gösterme
+    cv2.imshow("Frame", frame)
+    key = cv2.waitKey(1) & 0xFF
+
+    # 'q' tuşuna basılırsa döngüyü kır
+    if key == ord("q"):
+        break
+
+
+# Video yakalama işlemini serbest bırak ve tüm pencereleri kapat
+camera.release()
+cv2.destroyAllWindows()
