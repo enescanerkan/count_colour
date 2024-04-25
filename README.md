@@ -1,4 +1,4 @@
-# ! The main color counting code is my CountColors, while the others are variants I tried and that helped in development.( Kodun son hali ColorCounting dosyası içerisindedir , diğer dosyalar geliştirme yaparken elde edilmiştir.)
+# ! The main color counting code is my CountColors, while the others are variants I tried and that helped in development.( Kodun son hali CountColor dosyası içerisindedir , diğer dosyalar geliştirme yaparken elde edilmiştir.)
 
 ## COLOR DETECTION APPLICATION
 This Python application captures live video from a webcam and detects specific colors in the video stream. The application is developed using libraries such as OpenCV and Tkinter.
