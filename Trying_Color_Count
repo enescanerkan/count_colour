@@ -1,0 +1,144 @@
+import cv2
+import numpy as np
+import time
+
+renkler = {
+    'Yesil': 0,
+    'Mavi': 0,
+    'Kirmizi': 0,
+    'Sari': 0
+}
+
+kamera = cv2.VideoCapture(0)
+
+son_tespit_zamani = {
+    'Yesil': 0,
+    'Mavi': 0,
+    'Kirmizi': 0,
+    'Sari': 0
+}
+
+tespit_araligi = 10  # 10 saniye
+
+goruntuleme_zamani = 0  # Yazının görüntülenme süresi
+goruntuleme_metni = ""  # Görüntülenecek yazı
+
+while True:
+    ret, kare = kamera.read()
+    kare = cv2.flip(kare, 1)
+    hsv_kare = cv2.cvtColor(kare, cv2.COLOR_BGR2HSV)
+
+    # Yesil renk aralığı için alt ve üst eşik değerleri
+    alt_yesil = np.array([45, 100, 50])
+    ust_yesil = np.array([75, 255, 255])
+    yesil_maske = cv2.inRange(hsv_kare, alt_yesil, ust_yesil)
+    yesil = cv2.bitwise_and(kare, kare, mask=yesil_maske)
+
+    # Mavi renk aralığı için alt ve üst eşik değerleri
+    alt_mavi = np.array([100, 150, 0])
+    ust_mavi = np.array([140, 255, 255])
+    mavi_maske = cv2.inRange(hsv_kare, alt_mavi, ust_mavi)
+    mavi = cv2.bitwise_and(kare, kare, mask=mavi_maske)
+
+    # Kırmızı renk aralığı için alt ve üst eşik değerleri
+    alt_kirmizi = np.array([150, 100, 100])
+    ust_kirmizi = np.array([179, 255, 255])
+    kirmizi_maske = cv2.inRange(hsv_kare, alt_kirmizi, ust_kirmizi)
+    kirmizi = cv2.bitwise_and(kare, kare, mask=kirmizi_maske)
+
+    suanki_zaman = time.time()
+
+    # Yesil renk için tespit eşiği
+    yesil_esik = 1000  # Belirlediğiniz bir değer
+
+    if cv2.countNonZero(yesil_maske) > yesil_esik:
+        if suanki_zaman - son_tespit_zamani['Yesil'] >= tespit_araligi:
+            renkler['Yesil'] += 1
+            son_tespit_zamani['Yesil'] = suanki_zaman
+            goruntuleme_zamani = suanki_zaman  # Yazının görüntülenme süresini güncelle
+            goruntuleme_metni = 'Yesil Nesne'  # Görüntülenecek yazıyı güncelle
+            print(f"Yesil nesne tespiti: {renkler['Yesil']} adet")
+            print(f"*********************")
+
+    # Mavi renk için tespit eşiği
+    mavi_esik = 500  # Belirlediğiniz bir değer
+
+    if cv2.countNonZero(mavi_maske) > mavi_esik:
+        if suanki_zaman - son_tespit_zamani['Mavi'] >= tespit_araligi:
+            renkler['Mavi'] += 1
+            son_tespit_zamani['Mavi'] = suanki_zaman
+            goruntuleme_zamani = suanki_zaman  # Yazının görüntülenme süresini güncelle
+            goruntuleme_metni = 'Mavi Nesne'  # Görüntülenecek yazıyı güncelle
+            print(f"Mavi nesne tespiti: {renkler['Mavi']} adet")
+            print(f"*********************")
+
+    # Kırmızı renk için tespit eşiği
+    kirmizi_esik = 1000  # Belirlediğiniz bir değer
+
+    if cv2.countNonZero(kirmizi_maske) > kirmizi_esik:
+        if suanki_zaman - son_tespit_zamani['Kirmizi'] >= tespit_araligi:
+            renkler['Kirmizi'] += 1
+            son_tespit_zamani['Kirmizi'] = suanki_zaman
+            goruntuleme_zamani = suanki_zaman  # Yazının görüntülenme süresini güncelle
+            goruntuleme_metni = 'Kirmizi Nesne'  # Görüntülenecek yazıyı güncelle
+            print(f"Kirmizi nesne tespiti: {renkler['Kirmizi']} adet")
+            print(f"*********************")
+
+    # Sarı renk için tespit eşiği
+    sari_esik = 1000  # Belirlediğiniz bir değer
+
+    alt_sari = np.array([22, 100, 100])
+    ust_sari = np.array([38, 255, 255])
+    sari_maske = cv2.inRange(hsv_kare, alt_sari, ust_sari)
+    sari = cv2.bitwise_and(kare, kare, mask=sari_maske)
+
+    if cv2.countNonZero(sari_maske) > sari_esik:
+        if suanki_zaman - son_tespit_zamani['Sari'] >= tespit_araligi:
+            renkler['Sari'] += 1
+            son_tespit_zamani['Sari'] = suanki_zaman
+            goruntuleme_zamani = suanki_zaman  # Yazının görüntülenme süresini güncelle
+            goruntuleme_metni = 'Sari Nesne'  # Görüntülenecek yazıyı güncelle
+            print(f"Sari nesne tespiti: {renkler['Sari']} adet")
+            print(f"*********************")
+
+    # Yazıyı ekrana yerleştirme
+    if suanki_zaman - goruntuleme_zamani <= tespit_araligi:
+        cv2.putText(kare, goruntuleme_metni, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
+
+    cv2.namedWindow("webcam", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("webcam", 800, 600)
+
+    cv2.namedWindow("Yesil", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("Yesil", 400, 300)
+
+    cv2.namedWindow("Mavi", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("Mavi", 400, 300)
+
+    cv2.namedWindow("Kirmizi", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("Kirmizi", 400, 300)
+
+    cv2.namedWindow("Sari", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("Sari", 400, 300)
+
+    cv2.imshow("webcam", kare)
+    cv2.imshow("Yesil", yesil)
+    cv2.imshow("Mavi", mavi)
+    cv2.imshow("Kirmizi", kirmizi)
+    cv2.imshow("Sari", sari)
+
+    key = cv2.waitKey(1)
+    if key == ord('q'):
+        break
+
+kamera.release()
+cv2.destroyAllWindows()
+
+# Renkleri yazdırma
+print("Tespit Edilen Renkler ve Sayilari:")
+for renk, sayi in renkler.items():
+    print(f"{renk}: {sayi} adet")
+    print(f"*********************")
+
+toplam_sayi = sum(renkler.values())
+print("Toplam Nesne Sayisi:", toplam_sayi)
+print(f"/*/*/*/*/*/*/*/*/*/*/*/*/*/")
