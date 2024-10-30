@@ -27,6 +27,7 @@ Color Detection: The application can detect specific colors such as green, blue,
 Color Counting: It updates the count of detected objects for each color, providing a real-time display of object counts. (Renk Sayımı: Tespit edilen nesnelerin her bir renk için sayısını güncelleyerek, nesne sayılarının gerçek zamanlı bir görüntüsünü sunar.)
 User Interface: The application offers a simple and user-friendly experience using the Tkinter GUI. (Kullanıcı Arayüzü: Uygulama, Tkinter GUI kullanarak basit ve kullanıcı dostu bir deneyim sunar.)
 
+```
 
 
 ## Images
