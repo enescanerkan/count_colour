@@ -16,3 +16,8 @@ The application, when executed, detects specific colors (Green, Blue, Red, Yello
 Color Detection: The application can detect specific colors such as green, blue, red, yellow, orange, purple, gray, and pink.
 Color Counting: It updates the count of detected objects for each color, providing a real-time display of object counts.
 User Interface: The application offers a simple and user-friendly experience using the Tkinter GUI.
+
+## Images
+
+![renksayma](https://github.com/user-attachments/assets/aa57e690-3400-4bf1-823b-e6bd244c0ef2)
+![arayüz](https://github.com/user-attachments/assets/012db87e-450e-43c7-ba6c-c5529b8070bf)
