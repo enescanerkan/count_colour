@@ -10,9 +10,12 @@ Before running the application, install the required libraries by executing the 
 ```bash
 pip install opencv-python pillow
 
+```
 Then, run the application using the command:
 
+```bash
 python count_colors.py
+```
 
 Note: Upon running the application, the webcam feed will automatically open. (Not: Uygulamayı çalıştırdığınızda, web kamerası görüntüsü otomatik olarak açılacaktır.)
 
@@ -26,9 +29,6 @@ Features
 Color Detection: The application can detect specific colors such as green, blue, red, yellow, orange, purple, gray, and pink. (Renk Tespiti: Uygulama, yeşil, mavi, kırmızı, sarı, turuncu, mor, gri ve pembe gibi belirli renkleri tespit edebilir.)
 Color Counting: It updates the count of detected objects for each color, providing a real-time display of object counts. (Renk Sayımı: Tespit edilen nesnelerin her bir renk için sayısını güncelleyerek, nesne sayılarının gerçek zamanlı bir görüntüsünü sunar.)
 User Interface: The application offers a simple and user-friendly experience using the Tkinter GUI. (Kullanıcı Arayüzü: Uygulama, Tkinter GUI kullanarak basit ve kullanıcı dostu bir deneyim sunar.)
-
-```
-
 
 ## Images
 
