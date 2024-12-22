@@ -32,6 +32,9 @@ User Interface: The application offers a simple and user-friendly experience usi
 
 ## Images
 
-![renksayma](https://github.com/user-attachments/assets/aa57e690-3400-4bf1-823b-e6bd244c0ef2)
-
-![arayüz](https://github.com/user-attachments/assets/012db87e-450e-43c7-ba6c-c5529b8070bf)
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/aa57e690-3400-4bf1-823b-e6bd244c0ef2" width="1920"/></td>
+    <td><img src="https://github.com/user-attachments/assets/012db87e-450e-43c7-ba6c-c5529b8070bf" width="1920"/></td>
+  </tr>
+</table>
